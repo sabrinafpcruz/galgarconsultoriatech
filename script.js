@@ -1,21 +1,11 @@
-if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/service-worker.js")
-        .then(() => console.log("Service Worker registrado com sucesso!"))
-        .catch((error) => console.log("Erro ao registrar Service Worker:", error));
-}
-
-function toggleMenu() {
-    const menu = document.getElementById('mobileMenu');
-    const overlay = document.getElementById('overlay');
-    const isOpen = menu.classList.contains('open');
-    
-    if (isOpen) {
-        menu.classList.remove('open');
-        overlay.classList.remove('show');
-    } else {
-        menu.classList.add('open');
-        overlay.classList.add('show');
-    }
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+        .then(registration => {
+            console.log('Service Worker registrado com sucesso:', registration);
+        })
+        .catch(error => {
+            console.error('Falha ao registrar o Service Worker:', error);
+        });
 }
 
 document.addEventListener("DOMContentLoaded", function () {

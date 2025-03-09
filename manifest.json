@@ -1,6 +1,7 @@
 {
     "name": "Galgar Consultoria Tech and People",
     "short": "Galgar",
+    "description": "O site que fala sobre a empresa Galgar Consultoria Tech and People",
     "start-url": "/",
     "background_color": "#ffffff",
     "theme_color": "#00ffff",
