@@ -1,64 +1,67 @@
-const CACHE_NAME = 'galgar-consultoria-v1';
+const CACHE_NAME = "pwa-cache-v2";
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/style.css',
-  '/script.js',
-  '/manifest.json'
+  "/",
+  "/index.html",
+  "/styles.css",
+  "/script.js",
+  "/manifest.json",
+  "/assets/logo-galgar-icon.svg"
 ];
-// Service Worker básico para offline
-self.addEventListener('install', function(event) {
+
+// Instalar e armazenar no cache
+self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open('my-cache').then(function(cache) {
-      return cache.addAll([
-        '/',
-        '/index.html',
-        '/styles.css',
-        '/script.js',
-        '/icon-192.png',
-        '/icon-512.png'
-      ]);
-    })
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(urlsToCache))
   );
 });
 
-self.addEventListener('fetch', function(event) {
+// Servir do cache quando offline
+self.addEventListener("fetch", (event) => {
   event.respondWith(
-    caches.match(event.request).then(function(response) {
-      return response || fetch(event.request);
-    })
+    caches.match(event.request).then((response) => response || fetch(event.request))
   );
 });
-// Instalando o Service Worker e armazenando em cache
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        return cache.addAll(urlsToCache);
-      })
-  );
+
+self.addEventListener('sync', (event) => {
+  if (event.tag === 'sync-data') {
+    event.waitUntil(syncData());
+  }
 });
-// Interceptando requisições para servir conteúdo do cache
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        return response || fetch(event.request);
-      })
-  );
+
+async function syncData() {
+  try {
+    const data = await getPendingData();
+    if (data) {
+      await fetch('/api/sync', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      console.log('Dados sincronizados com sucesso!');
+    }
+  } catch (error) {
+    console.error('Erro ao sincronizar dados:', error);
+  }
+}
+
+// Função fictícia para obter dados pendentes do IndexedDB
+async function getPendingData() {
+  return { message: "Dados pendentes para sincronizar" };
+}
+// Escuta eventos de sincronização periódica
+self.addEventListener("periodicsync", (event) => {
+  if (event.tag === "sync-latest-data") {
+    event.waitUntil(updateData());
+  }
 });
-// Atualizando o cache quando o Service Worker é ativado
-self.addEventListener('activate', event => {
-  const cacheWhitelist = [CACHE_NAME];
-  event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (!cacheWhitelist.includes(cacheName)) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
-  );
-});
+
+// Função para buscar novos dados do servidor
+async function updateData() {
+  try {
+    const response = await fetch("/api/latest-data"); // Substitua pela URL real da sua API
+    const data = await response.json();
+    console.log("🔄 Dados atualizados:", data);
+  } catch (error) {
+    console.error("❌ Erro ao atualizar dados:", error);
+  }
+}

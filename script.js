@@ -7,7 +7,41 @@ if ('serviceWorker' in navigator) {
             console.error('Falha ao registrar o Service Worker:', error);
         });
 }
-
+if ('serviceWorker' in navigator && 'SyncManager' in window) {
+    navigator.serviceWorker.register('/service-worker.js').then((registration) => {
+      console.log('Service Worker registrado com sucesso!', registration);
+    }).catch((error) => {
+      console.log('Falha ao registrar o Service Worker:', error);
+    });
+  } else {
+    console.log('Background Sync não é suportado neste navegador.');
+  }  
+// Verifica se o navegador suporta Service Worker e Periodic Sync
+if ("serviceWorker" in navigator && "periodicSync" in Registration.prototype) {
+    navigator.serviceWorker.register("/service-worker.js").then(async (registration) => {
+      console.log("✅ Service Worker registrado com sucesso!");
+  
+      // Solicita permissão para sincronização em background
+      const status = await navigator.permissions.query({ name: "periodic-background-sync" });
+  
+      if (status.state === "granted") {
+        try {
+          await registration.periodicSync.register("sync-latest-data", {
+            minInterval: 24 * 60 * 60 * 1000 // Sincroniza a cada 24h
+          });
+          console.log("✅ Periodic Background Sync registrado!");
+        } catch (error) {
+          console.error("❌ Erro ao registrar o Periodic Sync:", error);
+        }
+      } else {
+        console.log("⚠️ Permissão para Background Sync não concedida.");
+      }
+    }).catch((error) => {
+      console.error("❌ Falha ao registrar o Service Worker:", error);
+    });
+  } else {
+    console.log("⚠️ Periodic Background Sync não suportado neste navegador.");
+  }
 document.addEventListener("DOMContentLoaded", function () {
     let index = 0;
     const slides = document.querySelectorAll(".carousel-slide");
