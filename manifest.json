@@ -10,11 +10,22 @@
         "https://galgarconsultoria.netlify.app" 
     ],
     "launch_handler": {
-    "client_mode": "navigate"
+    "client_mode": 
+        "navigate"
     },
+    "categories": [
+        "business",
+        "consulting",
+        "productivity"
+    ],
+    "dir": "ltr",
+    "lang": "pt",
     "orientation": "any",
     "display": "standalone",
-    "display_override": ["window-controls-overlay", "standalone"],
+    "display_override": [
+        "window-controls-overlay", 
+        "standalone"
+    ],
     "background_color": "#ffffff",
     "theme_color": "#00ffff",
     "icons": [
