@@ -3,6 +3,16 @@
     "short_name": "Galgar",
     "description": "O site que fala sobre a empresa Galgar Consultoria Tech and People",
     "start_url": "/",
+    "scope": "/",
+    "id": "com.galgarconsultoria.app",
+    "related_applications": [],
+    "scope_extensions": [
+        "https://galgarconsultoria.netlify.app" 
+    ],
+    "launch_handler": {
+    "client_mode": "navigate"
+    },
+    "orientation": "any",
     "display": "standalone",
     "display_override": ["window-controls-overlay", "standalone"],
     "background_color": "#ffffff",
@@ -19,4 +29,5 @@
             "type": "image/png"
         }
     ]
+    
 }
