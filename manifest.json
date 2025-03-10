@@ -3,6 +3,8 @@
     "short_name": "Galgar",
     "description": "O site que fala sobre a empresa Galgar Consultoria Tech and People",
     "start_url": "/",
+    "display": "standalone",
+    "display_override": ["window-controls-overlay", "standalone"],
     "background_color": "#ffffff",
     "theme_color": "#00ffff",
     "icons": [
